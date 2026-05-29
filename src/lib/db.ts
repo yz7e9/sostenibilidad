@@ -1,15 +1,23 @@
 import Database from "better-sqlite3";
 import path from "path";
+import fs from "fs";
 import bcrypt from "bcryptjs";
 
-const DB_PATH = path.join(process.cwd(), "data", "sostenibilidad.db");
+const DB_PATH =
+  process.env.DATABASE_PATH ??
+  (process.env.VERCEL
+    ? "/tmp/sostenibilidad.db"
+    : path.join(process.cwd(), "data", "sostenibilidad.db"));
 
 let db: Database.Database | null = null;
 
 export function getDb(): Database.Database {
   if (!db) {
+    const dir = path.dirname(DB_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
     db = new Database(DB_PATH);
-    db.pragma("journal_mode = WAL");
+    if (!process.env.VERCEL) db.pragma("journal_mode = WAL");
     db.pragma("foreign_keys = ON");
     inicializarTablas();
     seedUsuarioPorDefecto();
