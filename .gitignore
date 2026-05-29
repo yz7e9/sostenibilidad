@@ -38,4 +38,4 @@ next-env.d.ts
 .agents/
 
 # sqlite database
-# /data/
+/data/
