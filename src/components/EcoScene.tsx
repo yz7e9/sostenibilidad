@@ -668,7 +668,7 @@ export default function EcoScene({ variables, sim, onPickup, onWebglStatus, debu
   }
 
   function clearAllRouteGroups() {
-    for (const [id] of routeGroupsRef.current) clearRouteGroup(id);
+    routeGroupsRef.current.forEach((_, id) => clearRouteGroup(id));
   }
 
   // Construye la visualización siguiendo el camino por calles (waypoints ya calculados con A*)
